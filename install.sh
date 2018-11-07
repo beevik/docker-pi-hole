@@ -22,16 +22,16 @@ which debconf-apt-progress
 mv "$(which debconf-apt-progress)" /bin/no_debconf-apt-progress
 
 # Get the install functions
-curl https://raw.githubusercontent.com/pi-hole/pi-hole/${CORE_TAG}/automated%20install/basic-install.sh > "$PIHOLE_INSTALL" 
+curl https://raw.githubusercontent.com/pi-hole/pi-hole/${CORE_TAG}/automated%20install/basic-install.sh > "$PIHOLE_INSTALL"
 PH_TEST=true . "${PIHOLE_INSTALL}"
 
 # Preseed variables to assist with using --unattended install
 {
-  echo "PIHOLE_INTERFACE=eth0"
+  echo "PIHOLE_INTERFACE=bond0"
   echo "IPV4_ADDRESS=0.0.0.0"
   echo "IPV6_ADDRESS=0:0:0:0:0:0"
-  echo "PIHOLE_DNS_1=8.8.8.8"
-  echo "PIHOLE_DNS_2=8.8.4.4"
+  echo "PIHOLE_DNS_1=1.1.1.1"
+  echo "PIHOLE_DNS_2=1.0.0.1"
   echo "QUERY_LOGGING=true"
   echo "INSTALL_WEB_SERVER=true"
   echo "INSTALL_WEB_INTERFACE=true"
@@ -46,7 +46,7 @@ distro_check
 apt-get -y install debconf-utils
 echo resolvconf resolvconf/linkify-resolvconf boolean false | debconf-set-selections
 
-# Tried this - unattended causes starting services during a build, should probably PR a flag to shut that off and switch to that 
+# Tried this - unattended causes starting services during a build, should probably PR a flag to shut that off and switch to that
 #bash -ex "./${PIHOLE_INSTALL}" --unattended
 install_dependent_packages INSTALLER_DEPS[@]
 install_dependent_packages PIHOLE_DEPS[@]
@@ -86,5 +86,5 @@ sed -i $'s/updatePiholeFunc;;/unsupportedFunc;;/g' /usr/local/bin/pihole
 touch /.piholeFirstBoot
 
 # Fix dnsmasq in docker
-grep -q '^user=root' || echo -e '\nuser=root' >> /etc/dnsmasq.conf 
+grep -q '^user=root' || echo -e '\nuser=root' >> /etc/dnsmasq.conf
 echo 'Docker install successful'
