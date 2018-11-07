@@ -9,7 +9,7 @@ export WEB_TAG='v4.0'
 export USE_CUSTOM_BRANCHES=false
 
 apt-get update
-apt-get install -y curl procps
+apt-get install -y curl procps vim
 curl -L -s $S6OVERLAY_RELEASE | tar xvzf - -C /
 mv /init /s6-init
 
